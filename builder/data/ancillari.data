@@ -1,0 +1,70 @@
+#
+# $Id: ancillari.data 68 2014-02-18 23:49:56Z nicb $
+#
+# 1    = 65,433 + 1 %    =  66,087  Hz       (F) 
+# 2    = 65,433 + 0.8 %  =  65,956  Hz       (E)
+# 3    = 65,433 + 0.6 %  =  65,825  Hz       (D)
+# 4    = 65,433 + 0.4 %  =  65,694  Hz       (C)
+# 5    = 65,433 + 0.2 %  =  65,563  Hz       (B)
+# 
+# 6     FB   =   65,433 Hz                   (A)  
+# 
+# 7    = 65,433  - 0.1 %  =  65,367  Hz      (G)
+# 8    = 65,433  - 0.3 %  =  65,236  Hz      (H)
+# 9    = 65,433  - 0.5 %  =  65,205  Hz      (I)
+# 10   = 65,433  - 0.6 %  =  65,040  Hz      (L)
+# 11   = 65,433  - 0.9 %  =  64,844  Hz      (M)
+# 
+C1|ABC
+C2|ABD
+C3|ABE
+C4|ABF
+C5|ABG
+C6|ABH
+C7|ABI
+C8|ABL
+C9|ABM
+
+C10|ACD
+C11|ACE
+C12|ACF
+C13|ACG
+C14|ACH
+C15|ACI
+C16|ACL
+C17|ACM
+
+C18|ADE
+C19|ADF
+C20|ADG
+C21|ADH
+C22|ADI
+C23|ADL
+C24|ADM
+
+C25|AEF
+C26|AEG
+C27|AEH
+C28|AEI
+C29|AEL
+C30|AEM
+
+C31|AFG
+C32|AFH
+C33|AFI
+C34|AFL
+C35|AFM
+
+C36|AGH
+C37|AGI
+C38|AGL
+C39|AGM
+
+C40|AHI
+C41|AHL
+C42|AHM
+
+C43|AIL
+C44|AIM
+
+C45|ALM

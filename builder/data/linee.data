@@ -1,0 +1,25 @@
+#
+# $Id: linee.data 68 2014-02-18 23:49:56Z nicb $
+#
+# Database delle linee - formato:
+#
+# n.linea | durata suoni | n.suoni | durata pausa minima
+#
+# il resto si ricava cosi`:
+# - n.pause = n.suoni - 1
+# - la pausa massima è data da dur.minima * n.pause
+# - le pause intermedie sono date da dur.minima * n
+# - dur.tot = n.suoni * dur.suoni + sum(pause)
+1|4.875|25|0.39375
+2|4.5|22|0.3993507
+3|4.125|20|0.40289
+4|3.75|19|0.36842
+5|3.375|18|0.37843
+6|3|17|0.40808
+7|2.625|17|0.39981
+8|2.25|17|0.40536
+9|1.875|17|0.42121
+10|1.5|18|0.38653
+11|1.125|19|0.37061
+12|0.75|19|0.40274
+13|0.375|20|0.39410

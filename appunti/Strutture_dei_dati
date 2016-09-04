@@ -1,0 +1,72 @@
+1) Il brano è costituito da 14 moduli. Il 14mo modulo merita un trattamento a
+  parte
+
+2) Ciascun modulo è costituito da 13 linee (questo vale anche per il modulo 14)
+
+3) Struttura dei dati del modulo:
+
+    - action time generale del modulo. In teoria, dovrebbe  esserci  una
+      regola così  concepita:  il  tempo  finale  di  ciascun  modulo  è
+      regolato  da  un   Delta   che   si   incrementa   geometricamente
+      moltiplicando un valore di partenza per 2 ad  ogni  incremento,  e
+      sommando i tempi finali modulo per modulo. In più, i  moduli  pari
+      hanno un valore di partenza = 3, i moduli dispari hanno un  valore
+      di partenza = 4.5, così:
+
+	  Durata Finale            720
+	  Modulo 12       -3       717
+	  Modulo 11          -4.5  712.5
+	  Modulo 10       -6       706.5
+	  Modulo  9          -9    697.5
+	  .....
+
+      Nella documentazione c'è una incongruenza riguarda  l'action  time
+      dei moduli 1, 2 e 3. E` opportuno quindi fare almeno una  versione
+      con i tempi tabulati.
+
+	- una ampiezza generale del modulo (in linea di principio sono tutte
+	  uguali, le ampiezze; ma è possibile che in una successiva iterazione
+	  queste ampiezze cambino)
+
+	- serie di 13 frequenze (== le frequenze di ciascuna linea)
+
+	- serie di 13 action times (== 1 per ciascuna linea)
+
+    - un coefficiente moltiplicativo (kmult = 0.75) che indica il  tempo
+      finale di ogni linea (con  la  seguente  regola:  tf  =  Mkmult  *
+      Nlinea, dove Mkmult e` il kmult del modulo e Nlinea  è  il  numero
+      della linea); l'action time di ciascuna linea è ricavato dal tempo
+      finale così calcolato meno la durata (fissa) di ciascuna linea
+
+4) Struttura dati della linea:
+
+	- durata del suono della linea (fissa)
+	- numero dei suoni
+	- durata di partenza delle pause
+	- durata finale delle pause
+	  (l'interpolazione tra durata di partenza e durata finale è lineare)
+
+5) Struttura dati delle frequenza:
+
+    - Ci sono quattro ottave non contigue
+	- La frequenza base della prima ottava è 60 Hz
+	- Il rapporto per ricavare le ottave seguenti è 3.4
+	- La frequenza alta è il doppio della frequenza bassa
+	- Ogni ottava è divisa in 24 parti uguali (temperate) secondo la radice
+	  ventiquattresima di due (quarti di tono)
+	- Le frequenze per ogni modulo sono il frutto di una scelta (probabilmente
+	  non del tutto arbitraria, ma dobbiamo ricostruire il metodo)
+
+14mo MODULO:
+
+1) suddiviso in due sotto-moduli, 14a e 14b
+
+2) Il primo modulo 14a ripete lo schema del modulo 7 con tutti i  valori
+   di tempo triplicati (durate dei suoni,  durate  delle  pause,  action
+   times, valori finali, ecc.)
+
+3) Il modulo 14b costituisce un 'negativo'  del  modulo  14a  (suoni  al
+   posto delle pause, pause al posto dei suoni)
+
+---
+$Id: Strutture_dei_dati 406 2006-03-18 16:37:18Z nicb $

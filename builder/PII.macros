@@ -1,0 +1,200 @@
+#
+# $Id: PII.macros,v 0.1 2005/11/07 00:31:03 nicb Exp nicb $
+#
+# Command Line arguments for groff:
+#
+# cat <file> | groff -p -mpic -P-l | gv --orientation=landscape -
+# 
+scale=2.54 # using cm here
+#
+# landscape mode
+#
+maxpswid=25.5
+maxpsht=19.8
+#
+# auxiliary funcs
+#
+#
+# module boxes: two boxes superimposed,
+#
+timeoff = 5
+timesize = 720
+frqmax = 5000
+frqmin = 10
+frqstep = 500
+define mylog { (log($1)/log(frqmax*10)) }
+mboxwid = maxpswid*0.95
+mboxdelta = maxpsht*0.05
+mboxtitleht = maxpsht*0.01
+mboxmodht = ((maxpsht-mboxdelta)*0.25)-mboxtitleht
+mboxfrqht = ((maxpsht-mboxdelta)*0.75)-mboxtitleht
+mboxsfrqht = mboxfrqht/5
+l2mn = mboxmodht/14
+l2mf = mboxfrqht/mylog(frqmax-frqmin)
+l2t  = mboxwid/(timesize+(2*timeoff))
+define yfrqht { (($1-frqmin)*l2mf) }
+ltoff = timeoff*l2t
+ltend = ltoff+(timesize*l2t)
+lendx = 0
+lstartx = 0
+ly = 0
+tx = 0
+ty = 0
+tht = 0.1
+i=0
+define xtics
+{
+	for i = 0 to timesize by 30 do
+	{
+		tx := (i*l2t)+ltoff
+		line from $1.sw + (tx,0) to $1.sw + (tx,-tht)
+		sprintf("%.0f",i) at last line.s below
+	}
+}
+# yticsfrq(modbox,frqmin,frqmax,frqstep)
+define yticsfrq
+{
+	l2mf := mboxsfrqht/($3-$2)
+	for i = $2 to $3 by $4 do
+	{
+		ty := (i-frqmin) * l2mf
+		line from $1.sw + (0,ty) to $1.sw + (-tht,ty)
+		sprintf("%.0f",i) at last line.w rjust
+	}
+}
+define Modulo_mod
+{
+	MB1_$1: box wid mboxwid ht mboxmodht
+	"Fausto Razzi - Progetto II - Modulo $1 (disposizione nel tempo)" at MB1_$1.nw + (0, mboxtitleht/1.5) ljust
+	xtics(MB1_$1)
+}
+oboxdelta = 0
+oboxleey = 5
+# Modulo_frq_o(octave,mod,frqmin,frqmax)
+define Modulo_frq_o
+{
+	oboxleey := mboxfrqht*0.025
+	mboxsfrqht := (mboxfrqht/5)-((1+(1/5))*oboxleey)
+	frqmin := $3
+	frqmax := $4
+	frqstep := (frqmax-frqmin)/2
+	l2mf := mboxsfrqht/(frqmax-frqmin)
+	oboxdelta := (($1-1)*mboxsfrqht)+($1*oboxleey)
+	MB2_$2_o$1: box outline "yellow" wid mboxwid ht mboxsfrqht with .s at MB2_$2.s + (0,oboxdelta)
+	yticsfrq(MB2_$2_o$1,frqmin,frqmax,frqstep)
+}
+frqs=0
+frqs2=0
+define Modulo_frq
+{
+	MB2_$1: box wid mboxwid ht mboxfrqht with .n at MB1_$1.s - (0,mboxdelta)
+	"Fausto Razzi - Progetto II - Modulo $1 (disposizione tempo/frequenza)" at MB2_$1.nw + (0, mboxtitleht/1.5) ljust
+	xtics(MB2_$1)
+	frqs := 60; frqs2 := frqs*2;
+	Modulo_frq_o(1,$1,frqs,frqs2)
+	frqs := frqs*3.4; frqs2 := frqs*2;
+	Modulo_frq_o(2,$1,frqs,frqs2)
+	# this is the median octave which does not follow the 3.4 rule
+	Modulo_frq_o(3,$1,408,694)
+	frqs := frqs*3.4; frqs2 := frqs*2;
+	Modulo_frq_o(4,$1,frqs,frqs2)
+	frqs := frqs*3.4; frqs2 := frqs*2;
+	Modulo_frq_o(5,$1,frqs,frqs2)
+}
+#  Modulo(m,m_start,m_end)
+define Modulo
+{
+	Modulo_mod($1,$2,$3)
+	Modulo_frq($1,$2,$3)
+}
+#
+# lines
+#
+octht=0
+oct = 0
+#
+# Linea_o(m,l,oct,startx,endx,f,frqmin,frqmax,ftag)
+#
+define Linea_o
+{
+	lstartx := $4
+	lendx   := $5
+	l2mf := mboxsfrqht/($8-$7)
+
+	#print "Modulo: " $1 ", Line: " $2 ",Freq: " $6 ", Octave selected: " $3
+	ly := ($6-$7)*l2mf
+	L_$1_$2_b: line from MB2_$1_o$3.sw + (lstartx,ly) to MB2_$1_o$3.sw + (lendx,ly)
+}
+# Linea(m,l,at,dur,amp,f0,f1,f2)
+f0 = 0
+f1 = 0
+f2 = 0
+define Linea
+{
+	lstartx := ($3*l2t)+ltoff
+	lendx := lstartx+($4*l2t)
+	f0 := $6; f1 := $7; f2 := $8;
+	oct := 1
+	
+	ly := $2*l2mn
+	L_$1_$2_a: line from MB1_$1.nw + (lstartx,-ly) to MB1_$1.nw + (lendx,-ly)
+
+	frqs := 60; frqs2 := frqs*2;
+	if (f0 >= frqs && f0 <= frqs2) then
+	{
+		Linea_o($1,$2,1,lstartx,lendx,f0,frqs,frqs2,F0);
+		Linea_o($1,$2,1,lstartx,lendx,f1,frqs,frqs2,F1);
+		Linea_o($1,$2,1,lstartx,lendx,f2,frqs,frqs2,F2);
+	} else
+	{
+		frqs := frqs*3.4; frqs2 := frqs*2;
+		if (f0 >= frqs && f0 <= frqs2) then
+		{
+			Linea_o($1,$2,2,lstartx,lendx,f0,frqs,frqs2,F0);
+			Linea_o($1,$2,2,lstartx,lendx,f1,frqs,frqs2,F1);
+			Linea_o($1,$2,2,lstartx,lendx,f2,frqs,frqs2,F2);
+		} else 
+		{
+			# this is the funny middle octave
+			if (f0 >= 408 && f0 <= 694) then
+			{
+				Linea_o($1,$2,3,lstartx,lendx,f0,408,694,F0);
+				Linea_o($1,$2,3,lstartx,lendx,f1,408,694,F1);
+				Linea_o($1,$2,3,lstartx,lendx,f2,408,694,F2);
+			} else 
+			{
+				frqs := frqs*3.4; frqs2 := frqs*2;
+				if (f0 >= frqs && f0 <= frqs2) then
+				{
+					Linea_o($1,$2,4,lstartx,lendx,f0,frqs,frqs2,F0);
+					Linea_o($1,$2,4,lstartx,lendx,f1,frqs,frqs2,F1);
+					Linea_o($1,$2,4,lstartx,lendx,f2,frqs,frqs2,F2);
+				} else 
+				{
+					frqs := frqs*3.4; frqs2 := frqs*2;
+					if (f0 >= frqs && f0 <= frqs2) then
+					{
+						Linea_o($1,$2,5,lstartx,lendx,f0,frqs,frqs2,F0);
+						Linea_o($1,$2,5,lstartx,lendx,f1,frqs,frqs2,F1);
+						Linea_o($1,$2,5,lstartx,lendx,f2,frqs,frqs2,F2);
+					}
+				}
+			}
+		}
+	}
+}
+lym = 0
+lyf = 0
+#
+# Vertical_Correspondence(m,l)
+#
+define Vertical_Correspondence
+{
+#	lym := $2*l2mn
+#	lyf := yfrqht($3)
+#	lstartx := ($4*l2t)+ltoff
+#	lendx := lstartx+($5*l2t)
+#	line dashed from L_$1_$2_a.w to L_$1_$2_b.w # outline "grey"
+#	line dashed from MB1_$1.nw + (lendx,-lym) to MB2_$1.sw + (lendx,lyf)\
+#		outline "grey"
+}

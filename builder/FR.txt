@@ -1,0 +1,571 @@
+FAUSTO RAZZI
+PROGETTO II - 1980
+
+VERSIONE 2005
+
+
+    La prima versione di questo lavoro - scritto nel 1980 su commissione della Biennale di Venezia - è stata realizzata in quello stesso anno al Centro di Sonologia Computazionale dell'Università di Padova (CSC) con il Music V, grazie alla collaborazione tecnica di Daniele Torresan e alla supervisione di Alvise Vidolin e Graziano Tisato.
+    Si dà qui la descrizione della seconda versione, realizzata nel 2005 in C Sound con la collaborazione di Nicola Bernardini.
+
+
+1.  STRUTTURA GENERALE
+
+   All'inizio degli anni '80 la  principale  difficoltà  di  un  lavoro realizzato con il Music V era probabilmente legata alle  limitazioni degli elaboratori  dell'epoca,  i quali  condizionavano  la  quantità  di informazioni che il  programma  era  in  grado  di  gestire. Poiché infatti il numero dei dati è direttamente in rapporto con la complessità del progetto, un livello di elaborazione molto alto del materiale avrebbe imposto dei limiti alla quantità delle informazioni necessarie per realizzare le strutture di base; inversamente, una maggiore attenzione a queste ultime avrebbe comportato un'elaborazione più ridotta del materiale.
+    Nell'elaborazione di Progetto II ho utilizzato lo stesso criterio impiegato già dalla fine degli anni '60 - con Musica per piano - per realizzare le strutture dei miei lavori affidati a strumenti tradizionali (e ovviamente anche poi del Progetto per una composizione elettronica): tale criterio - che prevede la variazione di un modulo-base (sinteticamente definibile come un canone di durate a più voci) - ha tra l'altro consentito in questo caso una notevole semplificazione nelle operazioni di memorizzazione dei dati.   
+
+    Tutte le forme d'onda impiegate in PROGETTO II sono di tipo sinusoidale: si tratta di una scelta precisa, dettata principalmente dalla volontà di limitare il campo della ricerca all'indagine sulla durata del suono/silenzio, escludendo del tutto quella sul timbro. 
+
+
+2.  IL MODULO-BASE
+    La struttura di Progetto II è data dalla sovrapposizione - nel tempo - di 13 varianti dello stesso modulo-base, costituito a sua volta dalla sovrapposizione di 13 linee (o "voci"), per la durata complessiva di 240":
+
+Figura 1
+
+2.1  La linea 1 ha la stessa durata della struttura complessiva del modulo (tempo finale = tfin = 240") mentre le altre linee - la cui durata decresce progressivamente - iniziano in tempi successivi, per terminare comunque nello stesso istante della prima.
+
+                    Tempo iniziale          Tempo finale           Durata
+
+Linea 1                0"00                       240"                      240"
+Linea 2              48"75                       240"                      207"50 
+Linea 3              80"95                       240"                      186"
+Linea 4            105"75                       240"                      169"50
+Linea 5            121"35                       240"                      159"
+Linea 6            133"50                       240"                      151"
+Linea 7            141"00                       240"                      145"50
+Linea 8            146"62                       240"                      142"
+Linea 9            150"84                       240"                      139"50
+Linea 10          153"86                       240"                      137"50
+Linea 11          155"25                       240"                      136"50
+Linea 12          156"88                       240"                      135"50
+Linea 13          157"62                       240"                      135"
+
+2.2  Ogni linea contiene un determinato numero di suoni a durata fissa, separati da pause la cui durata diminuisce invece in modo progressivo:
+
+
+                                                                                                    Durata complessiva suoni         Durata complessiva pause
+
+ 
+   Linea 1:     25 suoni della durata di 4" 875 ciascuno                             121"875        240 - 121"875 =          118"125
+                     24 pause:  pausa 1 = 24 x c1 = 9"45        (c1 = 0"39375)                                   
+                                      pausa 2 = 23 x c1 = 9"06
+                                      pausa 3 = 22 x c1 = 8"66
+                                      ???????????.      
+                                      pausa 24 = c1       = 0"39375
+
+   Linea 2:     22 suoni della durata di  4" 5 ciascuno                                  99"              240 - 48"75 - 99" =         92"25
+                     21 pause : pausa 1 =  21 x c2 =  8"38      (c2=  0"39935)
+                                      pausa 2 =  20 x c2  =  7"98
+                                      ???????????.
+                                      pausa 21 = c2       =  0"3993507 
+
+   Linea 3:     20  suoni della durata di  4" 125 ciascuno                             82"5            240 - 80"95 - 82"5 =       76"55      
+                       19 pause:  pausa 1 = 19 x c3 = 7"65      (c3 = 0"40289)
+                                        pausa 2 = 18 x c3 = 7"25
+                                        ???????????..
+                                        pausa 19 = c3 =    0"40289                                       
+
+   Linea 4:     19 suoni della durata di  3"75 ciascuno                                 71"25          240 - 105"75 - 71"25 =    63"
+                       18 pause:  pausa 1 = 18 x c4 =  6"63    (c4 = 0"36842)
+                                        pausa 2 =  17 x c4 = 6"26
+                                        ???????????.
+                                        pausa 18 = c4 = 0"36842
+                                                                                                
+   Linea 5:     18 suoni della durata di  3"375 ciascuno                               60"75         240 - 121"35 - 60"75 =      57"9
+                       17 pause: pausa 1 = 17 x c5 = 6"43     (c5 = 0"37843)
+                                       pausa 2 = 16 x c5 = 6"05
+                                       ???????????
+                                       pausa 17 = c5      = 0"37843
+                                                                                                 
+   Linea 6:     17 suoni della durata di  3" ciascuno                                     51"             240 - 133"5 - 51"  =         55"5
+                       16 pause: pausa 1 = 16 x c6 = 6"52     (c6 = 0"40808)
+                                       pausa 2 = 15 x c6 = 6"12
+                                       ???????????
+                                       pausa 16 = c6      = 0"40808
+                                                                                                 
+   Linea 7:     17 suoni della durata di  2"625 ciascuno                               44"625      240 - 141" - 44"625 =       54"375
+                       16 pause: pausa 1 = 16 x c7 = 6"39     (c7 = 0"39981)
+                                       pausa 2 = 15 x c7 = 5"99
+                                       ???????????
+                                       pausa 16 = c7      = 0" 39981
+                                                                                                 
+   Linea 8:     17 suoni della durata di  2"25 ciascuno                                 38"25        240 - 146"62 - 38"25 =     55"13
+                       16 pause: pausa 1 = 16 x c8 = 6"48     (c8 = 0"40536)
+                                       pausa 2 = 15 x c8 = 6"08
+                                       ???????????
+                                       pausa 16 = c8      = 0" 40536
+                                                                                                  
+   Linea 9:     17 suoni della durata di   1"875 ciascuno                              31"875      240 - 150"84 - 31"875 =   57"285
+                       16 pause: pausa 1 = 16 x c9 = 6"73     (c9 = 0"42121)
+                                       pausa 2 = 15 x c9  = 6"31
+                                       ???????????
+                                       pausa 16 = c9      = 0" 42121
+                                                                                                 
+   Linea 10:   18 suoni della durata di  1"5 ciascuno                                   27"            240 - 153"86 - 27" =        59"14
+                       17 pause: pausa 1 = 17 x c10 = 6"57     (c10 = 0"38653)
+                                       pausa 2 = 16 x c10 = 6"18
+                                       ???????????
+                                       pausa 17 = c10      = 0" 38653
+                                                                                                
+   Linea 11:   19 suoni della durata di   1"125 ciascuno                              21"375      240 - 155"25 - 21"375 =   63"375
+                       18 pause: pausa 1 = 18 x c11 = 6"67     (c11 = 0"37061)
+                                       pausa 2 = 17 x c11 = 6"30
+                                       ???????????
+                                       pausa 18 = c11      = 0" 37061
+                                                                                                 
+   Linea 12:   19 suoni della durata di   0"75 ciascuno                                14"25        240 - 156"88 - 14"25 =     68"87
+                       18 pause: pausa 1 = 18 x c12 = 7"25     (c12 = 0"40274)
+                                       pausa 2 = 17 x c12 = 6"84
+                                       ???????????
+                                       pausa 17 = c12      = 0" 40274 
+                                                                                                
+   Linea 13:   20 suoni della durata di   0" 375 ciascuno                               7"5          240 - 157"62 - 7"5 =        74"88   
+                   19 pause: pausa 1 = 19 x c13 = 7"48     (c13 = 0"39410)
+                                       pausa 2 = 18 x c13 = 7"09
+                                       ???????????
+                                       pausa 19 = c13      = 0" 39410                                                                                                  
+
+
+2.3  Nella struttura le trasformazioni sono  realizzate a ritroso, nel senso che il modulo-base è l'ultimo ad apparire in ordine di tempo e viene perciò indicato come M 13.  Le 12 varianti (indicate - procedendo all'indietro - come M 12,  M 11 ??.. M 1) sono state ricavate anticipando il tempo finale di ciascuna linea rispetto alla Linea 1 secondo il seguente procedimento:
+  
+M 12         Linea 1               tfin   =  240"
+                  Linea 2               tfin   =  240" - ?                         [? = 0.75]
+                  Linea 3               tfin   =  240" - 2 ?
+                  Linea 4               tfin   =  240" - 3 ?       
+                  ???????????????..
+                  Linea 13             tfin   =  240" - 12 ?
+
+
+M 11         Linea 1               tfin   =  240"         
+                  Linea 2               tfin   =  240" - 2 ?
+                  Linea 3               tfin   =  240" - 2(2 ?)
+                  Linea 4               tfin   =  240" - 3(2 ?)
+                  ????????????????
+                  Linea 13             tfin   =  240" -  12(2 ?)
+
+                  ????????????????.
+                  ????????????????.
+
+M 1           Linea 1               tfin   =  240"         
+                  Linea 2               tfin   =  240" - 12 ?
+                  Linea 3               tfin   =  240" - 2(12 ?)
+                  Linea 4               tfin   =  240" - 3(12 ?)
+                  ????????????????
+                  Linea 13             tfin   =  240" -  12(12 ?)
+
+
+Il modulo M 1 assume quindi l'aspetto seguente:  
+
+figura 2
+
+    Va notato che la variazione comporta anche una modificazione dello spessore complessivo del modulo, in quanto la sezione di massima compresenza di tutte le voci risulta mano a mano anticipata ed accorciata.
+
+
+figura 3
+
+
+3.  AGGIUNTA DI UN 14° MODULO
+    La struttura ha poi per base un 14° modulo (M 14) costituito da  due
+    sottomoduli tra loro complementari,  il  primo  dei  quali  (M  14a)
+    ripete esattamente lo schema del modulo  "centrale"  (M  7)  ma  con
+    tutti i valori di  durata  triplicati;  il  secondo  (M  14b)  è  il
+    "negativo" del precedente (suoni al posto delle pause e  viceversa).
+    Da notare quindi che in questo caso -  a  differenza  di  tutti  gli
+    altri moduli - sono le pause ad avere una durata costante, mentre la
+    durata dei suoni diminuisce progressivamente.  La  durata  di  M  14
+    determina quindi anche la durata complessiva del lavoro (720").
+
+
+4. SOVRAPPOSIZIONE DEI MODULI
+   La sovrapposizione dei 14 moduli è regolata dalla tabella che  segue,
+   in cui i tempi finali di M 14 e M 13 coincidono (Tfin = 720) e quelli
+   dei moduli M 12. M  11,?..M  1  vengono  progressivamente  anticipati
+   sottraendo dal Tfin di ogni modulo "precedente" il valore costante K,
+   2K, ?..12K (ove K = 6.1538). I tempi di attacco di  ogni  modulo  (AT
+   13, AT 12?..AT  1)  sono  infine  ottenuti  sottraendo  dal  Tfin  di
+   ciascuno la durata di 240":
+                                                 
+M 14     Tfin    =   720"                                                       AT 14                                =      0.00
+M 13      Tfin      =   720"                                                               AT 13   =  720 - 240             =   480. 00                         
+M 12     Tfin    =  720" -  K        =   713.84                        AT 12  =  713.84 - 240    =   473.84 
+M 11     Tfin    =  713.85 -  2K   =   701.53                        AT 11  =  701.53 - 240    =   461.53
+M 10     Tfin    =  701.55 -  3K   =   683.07                        AT 10  =  683.07 - 240    =   443.07
+M 9       Tfin    =  683.10 -  4K   =   658.46                        AT 9    =  658.46 - 240    =   418.46
+M 8       Tfin    =  658.50 -  5K   =   627.69                        AT 8    =  627.69 - 240    =   387.69
+M 7       Tfin    =  627.75 -  6K   =   590.77                        AT 7    =  590.77  - 240   =   350.77
+M 6       Tfin    =  590.85 -  7K   =   547.69                        AT 6    =  547.69  - 240   =   307.69
+M 5       Tfin    =  547.80 -  8K   =   498.46                        AT 5    =  498.46  - 240   =   258.46
+M 4       Tfin    =  498.60 -  9K   =   443.07                        AT 4    =  443.07  - 240   =   203.07
+M 3       Tfin    =  443.25 -  10K =   381.54                        AT 3    =  381.54  - 240   =   141.54
+M 2       Tfin    =  381.75 -  11K =   313.84                        AT 2    =  313.84  - 240   =     73.84
+M 1       Tfin    =  314.10 -  12K =   240.00                        AT 1    =  240 - 240         =       0.00
+
+
+5. SCELTA DELLE FREQUENZE
+
+5.1  Il campo delle frequenze è limitato a 4 ottave non contigue, ognuna delle quali è suddivisa in quarti di tono secondo la          , per  un totale di 100 frequenze:
+
+Ottava 1    25 frequenze                             da 60 Hz a 120 Hz
+Ottava 2              "            (60 Hz x 3.4)      da 204 Hz  a 408 Hz
+Ottava 3              "            (204 Hz x 3.4)    da 693,6 Hz  a 1387,2 Hz
+Ottava 4              "            (693,6 Hz x 3.4) da 2358,24 Hz  a 4716,48 Hz
+
+Il coefficiente 3.4 è stato scelto per ottenere rapporti non armonici tra le frequenze delle varie ottave.
+
+
+5.2   Il lavoro presenta due ordini di BATTIMENTI, dei quali il primo viene prodotto dall'incontro tra le singole frequenze, il secondo è ottenuto prevedendo per ognuna delle 100 frequenze una coppia di frequenze scelte in modo da produrre battimenti volta per volta differenziati (calcolati cioè in relazione alla specifica durata del suono e alla sua altezza).
+    Nella tabella seguente sono riportati i valori percentuali in più o  in meno rispetto alle frequenze di base (FB)  
+
+Frequenze dell'ottava 1               FB    +0.2 % // +0.4  // +0.6 // +0.8  // +1
+                                                               - 0.1%  // - 0.3  // - 0.5 // - 0.7  // - 0.9
+
+Frequenze dell'ottava 2               FB    +0.2 % // +0.4  // +0.6 // +0.8 // +1
+                                                               - 0.1%  // - 0.3  // - 0.5 // - 0.7 // - 0.9
+
+Frequenze dell'ottava 3               FB    +0.2 % // +0.4  // +0.6 // +0.8 // +1
+                                                                - 0.1% // - 0.3  // - 0.5 // - 0.7 // - 0.9
+
+Frequenze dell'ottava 4               FB    +0.02 %// +0.04  // +0.06 // +0.08 // +0.1
+                                                               - 0.01% // - 0.03  // - 0.05 // - 0.07 // - 0.09 
+
+        In tal modo per ogni  FB si ottengono 10 frequenze: qui di seguito vengono riportate come esempio le frequenze ottenute sulla  FB  di   65,433 Hz:
+
+1    = 65,433 + 1 %     =  66,087  Hz     (F) 
+2    = 65,433 + 0.8 %  =  65,956  Hz     (E)
+3    = 65,433 + 0.6 %  =  65,825  Hz     (D)
+4    = 65,433 + 0.4 %  =  65,694  Hz     (C)
+5    = 65,433 + 0.2 %  =  65,563  Hz     (B)
+
+6     FB   =   65,433 Hz          (A)  
+
+7    = 65,433  - 0.1 %  =  65,367  Hz      (G)
+8    = 65,433  - 0.3 %  =  65,236  Hz      (H)
+9    = 65,433  - 0.5 %  =  65,205  Hz      (I)
+10  = 65,433  - 0.7 %  =  64,974  Hz      (L)
+11  = 65,433  - 0.9 %  =  64,844  Hz      (M)
+
+
+
+
+
+
+5.3   Le frequenze così ottenute per ogni  FB sono raggruppare in 45 combinazioni (Cn), le quali producono differenti tipi di battimenti composti: 
+
+C1    ABC
+C2    ABD
+C3    ABE
+C4    ABF
+C5    ABG
+C6    ABH
+C7    ABI
+C8    ABL
+C9    ABM
+
+C10  ACD
+C11  ACE
+C12  ACF
+C13  ACG
+C14  ACH
+C15  ACI
+C16  ACL
+C17  ACM
+
+C18  ADE
+C19  ADF
+C20  ADG
+C21  ADH
+C22  ADI
+C23  ADL
+C24  ADM
+
+C25  AEF
+C26  AEG
+C27  AEH
+C28  AEI
+C29  AEL
+C30  AEM
+
+C31  AFG
+C32  AFH
+C33  AFI
+C34  AFL
+C35  AFM
+
+C36  AGH
+C37  AGI
+C38  AGL
+C39  AGM
+
+C40  AHI
+C41  AHL
+C42  AHM
+
+C43  AIL
+C44  AIM
+
+C45  ALM
+
+          Ciascuna linea di ogni modulo impiega solo una combinazione.                                                                                    
+
+
+5.4   Per il modulo M 8 è stata scelta una frequenza non compresa nelle 4 ottave considerate precedentemente ma "centrale" rispetto ad esse (542.86 Hz). 
+
+
+5.5   RIEPILOGO
+
+                                                               OTTAVA 1         2                   3                   4
+
+
+MODULO 1  da 0" 00 a 240" 00 
+          1       60,00                                         C1
+          2   2804,91                                                                                                         C1
+          3   2887,15                                                                                                         C2
+          4       61,74                                         C2
+          5   3240,94                                                                                                         C3
+          6       63,56                                         C3
+          7       65,43                                         C4
+          8       67,35                                         C5 
+          9   3148,62                                                                                                         C4
+        10   3058,94                                                                                                         C5
+        11       69,32                                         C6  
+        12       71,35                                         C7    
+        13       73,45                                         C8 
+
+MODULO 2  da 73" 84 a 313" 84 
+
+Linea 1      75,60                                         C9 
+          2      77,82                                         C10
+          3  2971,80                                                                                                         C6
+          4      80,10                                         C11
+          5  2725,01                                                                                                         C7
+          6  2647,39                                                                                                         C8
+          7  2358,24                                                                                                         C9
+          8      82,45                                        C12
+          9      84,87                                        C13
+        10  2427,54                                                                                                         C10
+        11  2498,72                                                                                                         C11
+        12  2571,98                                                                                                         C12
+        13      87,35                                        C14
+
+
+MODULO 3  da 141" 54 a 381" 54
+
+Linea 1      89,92                                        C15
+          2      92,55                                        C16
+          3  1387.20                                                                                    C1 
+          4      95,27                                        C17
+          5      98,06                                        C18
+          6  1348.24                                                                                    C2
+          7    100,93                                        C19
+          8    103,89                                        C20
+          9  1309.83                                                                                    C3
+        10    106,94                                        C21
+        11    396,54                                                                C1
+        12    385,24                                                                C2
+        13    110,08                                        C22
+
+       
+MODULO 4  da 203" 07 a 443" 07 
+
+Linea 1  2804,91                                                                                                         C13
+          2  1272.52                                                                                     C4
+          3    374,27                                                                C3
+          4    113,30                                       C23
+          5  2887,15                                                                                                         C14
+          6  1236.28                                                                                     C5
+          7  1166.85                                                                                     C6
+          8    116,63                                       C24
+          9    120,00                                       C25
+        10  3058,94                                                                                                         C15
+        11  1201.06                                                                                     C7
+        12  3148,62                                                                                                         C16
+        13  3240,94                                                                                                         C17
+
+       
+MODULO 5 da 258" 46 a 498" 46 
+
+Linea 1   408,00                                                               C4
+          2   257,05                                                               C5
+          3   396,54                                                               C6
+          4   204,00                                                               C7
+          5   228,99                                                               C8
+          6   235,71                                                               C9
+          7   209,98                                                               C10
+          8   249,73                                                               C11
+          9   216,13                                                               C12
+        10   222,47                                                               C13
+        11   242,62                                                               C14
+        12   264,59                                                               C15
+        13   374,27                                                               C16
+
+
+MODULO  6 da 307" 69 a 547" 69 
+
+Linea  1     981,1                                                                                    C8
+           2     953,1                                                                                    C9
+           3   1009,8                                                                                    C10
+           4     926,0                                                                                    C11
+           5   1039,4                                                                                    C12
+           6     899,6                                                                                    C13
+           7   1069,9                                                                                    C14
+           8     874,0                                                                                    C15
+           9   1101,3                                                                                    C16
+         10     849,1                                                                                    C17 
+         11   1133,6                                                                                    C18
+         12     824,9                                                                                    C19
+         13   1166,8                                                                                    C20
+
+
+
+
+MODULO 7  da 350" 77 a 590" 77 
+
+Linea 1   204,00                                                                C17
+          2   305,72                                                                C18
+          3   209,98                                                                C19 
+          4   408,00                                                                C20
+          5   363,61           			  C21
+          6   353,25                                                                C22         
+          7   396,54                                                                C23
+          8   333,41                                                                C24
+          9   385,24                                                                C25 
+        10   374,27                                                                C26
+        11   343,19                                                                C27
+        12   314,69                                                                C28
+        13   222,47                                                                C29
+
+
+MODULO 8  da  387" 69 a 627" 69 
+
+Linea 1   542,86  Hz                                   C1
+          2         "          -0.1% =  542,31         C4 
+          3         "         +0.1% =  543,40          C7
+          4         "          -0.2% =  541,77         C10
+          5         "         +0.2% =  543,94         C13
+          6         "          -0.3% =  541,23         C16
+          7         "         +0.3% =  544,48         C19
+          8         "          -0.4% =  540,68         C22
+          9         "         +0.4% =  545,03         C25
+         10        "          -0.5% =  540,14         C28
+         11        "         +0.5% =  545,57         C31
+         12        "          -0.6% =  539,60         C34
+         13        "         +0.6% =  546,11         C37
+
+
+MODULO  9 da  418" 46 a 658" 46 
+
+Linea 1    408,0                                                                C30      
+          2    693,6                                                                                       C21
+          3    396,54                                                              C31         
+          4    734,8                                                                                       C22        
+          5    353,25                                                              C32                 
+          6    824,9                                                                                       C23       
+          7    385,24                                                              C33        
+          8    801,4                                                                                       C24       
+          9    305,72                                                              C34         
+        10    756,4                                                                                       C25        
+        11    343,19                                                              C35        
+        12  1009,.8                                                                                      C26        
+        13   323,91                                                               C36        
+
+
+MODULO 10 da  443" 07 a 683" 07 
+
+Linea 1   374,27                                                                C37           
+          2   713,9                                                                                        C27           
+          3   333,41                                                                C38           
+          4   849,1                                                                                        C28           
+          5   296,99                                                                C39           
+          6   981,1                                                                                        C29          
+          7   363,61                                                                C40           
+          8   778,5                                                                                        C30          
+          9   314,69                                                                C41           
+        10   874,0                                                                                        C31           
+        11   272,35                                                                C42           
+        12   953,1                                                                                        C32          
+        13   288,55                                                                C43           
+
+
+MODULO 11 da  461" 53 a 701" 53 
+
+Linea 1  1309,8                                                                                      C33           
+          2  1387,2                                                                                      C34   
+          3  1272,5                                                                                      C35           
+          4  2358,24                                                                                                          C18     
+          5  2427,54                                                                                                          C19          
+          6  1039,4                                                                                      C36          
+          7  2647,39                                                                                                          C20         
+          8  2725,01                                                                                                          C21         
+          9  2571,98                                                                                                          C22           
+        10  1348,2                                                                                      C37           
+        11  1069,9                                                                                      C38           
+        12  2498,72                                                                                                          C23         
+        13  1201,0                                                                                      C39           
+
+
+MODULO 12 da  473" 84 a 713" 84 
+
+Linea 1    894,6                                                                                      C40          
+          2  1236,2                                                                                      C41           
+          3  1101,3                                                                                      C42           
+          4    926,0                                                                                      C43           
+          5  1133,6                                                                                      C44         
+          6  1166,8                                                                                      C45          
+          7  4716,48                                                                                                          C24       
+          8  2804,91                                                                                                          C25          
+          9  3148,62                                                                                                          C26           
+        10  3058,94                                                                                                          C27           
+        11  2887,15                                                                                                          C28           
+        12  2971,8                                                                                                            C29                   
+        13    280,33                                                               C44           
+
+
+MODULO 13 da  480" 00 a 720" 00
+
+Linea 1   235.71                                                                C45           
+          2   204,00                                                                C1           
+          3   264,59                                                                C2            
+          4   228,99                                                                C3            
+          5   209,98                                                                C4            
+          6   242,62                                                                C5            
+          7   249,73                                                                C6            
+          8   120,00                                          C26         
+          9   257,05                                                                C7           
+        10   216,13                                                                C8           
+        11   222,47                                                                C9           
+        12   113,30                                          C27            
+        13   116,63                                          C28            
+
+
+MODULO 14 a  da 0" 00 a 720"00
+
+Linea 1    60 Hz      Combinaz.                   C1     [ 60  // 60 +0.2% = 60,12   //  60 +0.4% = 60,24] 	
+          2    61,75      		               C3       	 
+          3    63,56      		               C5     	 
+          4    65,43      		               C7	 
+          5    67,35      		               C9	 
+          6    69,32      		               C11	 
+          7    71,35      		               C13	 
+          8    73,45      		               C15	 
+          9    75,60      		               C17	 
+        10    77,82      		               C19	 
+        11    80,10      		               C21	 
+        12    82,45      		               C23	 
+        13    84,87      		               C25	 
+                                      
+
+MODULO 14 b da 0" 00 a 720"00
+
+Linea 1  4716,48 Hz     Combinazione   C44    [4716,48 // 4716,48 -0.05% = 4714,12 // 4716,48 -0.09% = 4712,23 ]
+          2  4584,33                                     C42
+          3  4453,75                                     C40				
+          4  4326,89                                     C38
+          5  4203,64                                     C36
+          6  4083,90                                     C34
+          7  3967,57                                     C32
+          8  3854,55                                     C30      
+          9  3744,75                                     C28
+       10   3638,09                                     C26
+       11   3534,46                                     C24  
+       12   3433,78                                     C22
+       13   3335,97                                     C20
+
