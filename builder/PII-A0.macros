@@ -1,16 +1,28 @@
 #
-# $Id: PII.macros,v 0.1 2005/11/07 00:31:03 nicb Exp nicb $
+# $Id$
+#
+# macros for the PII A0 score (large size), with color modules
 #
 # Command Line arguments for groff:
 #
-# cat <file> | groff -p -mpic -P-l | gv --orientation=landscape -
+# cat <file> | groff -dpaper=a0 -p -mpic -P-l | gv --orientation=landscape -
 # 
 scale=2.54 # using cm here
 #
 # landscape mode
 #
-maxpswid=25.5
-maxpsht=19.8
+# A0: most readers won't grok it
+#
+# maxpswid=118.9
+# maxpsht=84.1
+#
+# A3
+# maxpswid=42.0
+# maxpsht=29.7
+#
+# A4
+maxpswid=29.7
+maxpsht=21.0
 #
 # auxiliary funcs
 #
@@ -23,11 +35,14 @@ frqmax = 5000
 frqmin = 10
 frqstep = 500
 define mylog { (log($1)/log(frqmax*10)) }
-mboxwid = maxpswid*0.95
+originx = 0
+originy = 0
+mboxwid = maxpswid*0.83
 mboxdelta = maxpsht*0.05
-mboxtitleht = maxpsht*0.01
-mboxmodht = ((maxpsht-mboxdelta)*0.25)-mboxtitleht
-mboxfrqht = ((maxpsht-mboxdelta)*0.75)-mboxtitleht
+mboxtitleht = maxpsht*0.015
+mboxmodht = ((maxpsht-mboxdelta)*0.0)-mboxtitleht
+mboxscoreht = ((maxpsht-mboxdelta)*0.98)-mboxtitleht
+mboxfrqht = mboxscoreht
 mboxsfrqht = mboxfrqht/5
 l2mn = mboxmodht/14
 l2mf = mboxfrqht/mylog(frqmax-frqmin)
@@ -80,16 +95,17 @@ define Modulo_frq_o
 	frqstep := (frqmax-frqmin)/2
 	l2mf := mboxsfrqht/(frqmax-frqmin)
 	oboxdelta := (($1-1)*mboxsfrqht)+($1*oboxleey)
-	MB2_$2_o$1: box outline "yellow" wid mboxwid ht mboxsfrqht with .s at MB2_$2.s + (0,oboxdelta)
-	yticsfrq(MB2_$2_o$1,frqmin,frqmax,frqstep)
+	MB2_freq_o$1: box outline "yellow" wid mboxwid ht mboxsfrqht with .s at MB2_freq.s + (0,oboxdelta)
+	yticsfrq(MB2_freq_o$1,frqmin,frqmax,frqstep)
 }
 frqs=0
 frqs2=0
 define Modulo_frq
 {
-	MB2_$1: box wid mboxwid ht mboxfrqht with .n at MB1_$1.s - (0,mboxdelta)
-	"Fausto Razzi - Progetto II - Modulo $1 (disposizione tempo/frequenza)" at MB2_$1.nw + (0, mboxtitleht/1.5) ljust
-	xtics(MB2_$1)
+print "Modulo " $1 ", wid: " mboxwid ", ht: " mboxfrqht
+	MB2_freq: box wid mboxwid ht mboxfrqht with .n at MB1_score_frame.n # - (0,mboxdelta)
+	# "Fausto Razzi - Progetto II - Modulo $1 (disposizione tempo/frequenza)" at MB2_freq.nw + (0, mboxtitleht/1.5) ljust
+	xtics(MB2_freq)
 	frqs := 60; frqs2 := frqs*2;
 	Modulo_frq_o(1,$1,frqs,frqs2)
 	frqs := frqs*3.4; frqs2 := frqs*2;
@@ -104,7 +120,7 @@ define Modulo_frq
 #  Modulo(m,m_start,m_end)
 define Modulo
 {
-	Modulo_mod($1,$2,$3)
+	#Modulo_mod($1,$2,$3)
 	Modulo_frq($1,$2,$3)
 }
 #
@@ -112,14 +128,13 @@ define Modulo
 #
 define Score_frame
 {
-	MB1_1: box invis wid mboxwid ht maxpsht*0.95
-	"\s+6\fBFausto Razzi - Progetto II - Partitura\fP\s0" at MB1_1.nw + (0, mboxtitleht/1.5) ljust
+	MB1_score_frame: box invis wid mboxwid ht mboxscoreht at originx-5,originy
+	"\s+2\fBFausto Razzi - Progetto II - Partitura\fP\s0" at MB1_score_frame.nw + (0, mboxtitleht/1.5) ljust
 }
 define Score
 {
-	mboxfrqht = (maxpsht*0.95)
 	Score_frame()
-	Modulo_frq(1,0,725)
+	Modulo(1,0,725)
 }
 #
 # lines
@@ -127,7 +142,7 @@ define Score
 octht=0
 oct = 0
 #
-# Linea_o(m,l,oct,startx,endx,f,frqmin,frqmax,ftag)
+# Linea_o(m,l,oct,startx,endx,f,frqmin,frqmax,ftag,color)
 #
 define Linea_o
 {
@@ -137,9 +152,9 @@ define Linea_o
 
 	#print "Modulo: " $1 ", Line: " $2 ",Freq: " $6 ", Octave selected: " $3
 	ly := ($6-$7)*l2mf
-	L_$1_$2_b: line from MB2_$1_o$3.sw + (lstartx,ly) to MB2_$1_o$3.sw + (lendx,ly)
+	L_$1_$2_b: line color $10 from MB2_freq_o$3.sw + (lstartx,ly) to MB2_freq_o$3.sw + (lendx,ly)
 }
-# Linea(m,l,at,dur,amp,f0,f1,f2)
+# Linea(m,l,at,dur,amp,f0,f1,f2,color)
 f0 = 0
 f1 = 0
 f2 = 0
@@ -151,46 +166,46 @@ define Linea
 	oct := 1
 	
 	ly := $2*l2mn
-	L_$1_$2_a: line from MB1_$1.nw + (lstartx,-ly) to MB1_$1.nw + (lendx,-ly)
+	# L_$1_$2_a: line from MB2_freq.nw + (lstartx,-ly) to MB2_freq.nw + (lendx,-ly)
 
 	frqs := 60; frqs2 := frqs*2;
 	if (f0 >= frqs && f0 <= frqs2) then
 	{
-		Linea_o($1,$2,1,lstartx,lendx,f0,frqs,frqs2,F0);
-		Linea_o($1,$2,1,lstartx,lendx,f1,frqs,frqs2,F1);
-		Linea_o($1,$2,1,lstartx,lendx,f2,frqs,frqs2,F2);
+		Linea_o($1,$2,1,lstartx,lendx,f0,frqs,frqs2,F0,$9);
+		Linea_o($1,$2,1,lstartx,lendx,f1,frqs,frqs2,F1,$9);
+		Linea_o($1,$2,1,lstartx,lendx,f2,frqs,frqs2,F2,$9);
 	} else
 	{
 		frqs := frqs*3.4; frqs2 := frqs*2;
 		if (f0 >= frqs && f0 <= frqs2) then
 		{
-			Linea_o($1,$2,2,lstartx,lendx,f0,frqs,frqs2,F0);
-			Linea_o($1,$2,2,lstartx,lendx,f1,frqs,frqs2,F1);
-			Linea_o($1,$2,2,lstartx,lendx,f2,frqs,frqs2,F2);
+			Linea_o($1,$2,2,lstartx,lendx,f0,frqs,frqs2,F0,$9);
+			Linea_o($1,$2,2,lstartx,lendx,f1,frqs,frqs2,F1,$9);
+			Linea_o($1,$2,2,lstartx,lendx,f2,frqs,frqs2,F2,$9);
 		} else 
 		{
 			# this is the funny middle octave
 			if (f0 >= 408 && f0 <= 694) then
 			{
-				Linea_o($1,$2,3,lstartx,lendx,f0,408,694,F0);
-				Linea_o($1,$2,3,lstartx,lendx,f1,408,694,F1);
-				Linea_o($1,$2,3,lstartx,lendx,f2,408,694,F2);
+				Linea_o($1,$2,3,lstartx,lendx,f0,408,694,F0,$9);
+				Linea_o($1,$2,3,lstartx,lendx,f1,408,694,F1,$9);
+				Linea_o($1,$2,3,lstartx,lendx,f2,408,694,F2,$9);
 			} else 
 			{
 				frqs := frqs*3.4; frqs2 := frqs*2;
 				if (f0 >= frqs && f0 <= frqs2) then
 				{
-					Linea_o($1,$2,4,lstartx,lendx,f0,frqs,frqs2,F0);
-					Linea_o($1,$2,4,lstartx,lendx,f1,frqs,frqs2,F1);
-					Linea_o($1,$2,4,lstartx,lendx,f2,frqs,frqs2,F2);
+					Linea_o($1,$2,4,lstartx,lendx,f0,frqs,frqs2,F0,$9);
+					Linea_o($1,$2,4,lstartx,lendx,f1,frqs,frqs2,F1,$9);
+					Linea_o($1,$2,4,lstartx,lendx,f2,frqs,frqs2,F2,$9);
 				} else 
 				{
 					frqs := frqs*3.4; frqs2 := frqs*2;
 					if (f0 >= frqs && f0 <= frqs2) then
 					{
-						Linea_o($1,$2,5,lstartx,lendx,f0,frqs,frqs2,F0);
-						Linea_o($1,$2,5,lstartx,lendx,f1,frqs,frqs2,F1);
-						Linea_o($1,$2,5,lstartx,lendx,f2,frqs,frqs2,F2);
+						Linea_o($1,$2,5,lstartx,lendx,f0,frqs,frqs2,F0,$9);
+						Linea_o($1,$2,5,lstartx,lendx,f1,frqs,frqs2,F1,$9);
+						Linea_o($1,$2,5,lstartx,lendx,f2,frqs,frqs2,F2,$9);
 					}
 				}
 			}
@@ -209,6 +224,6 @@ define Vertical_Correspondence
 #	lstartx := ($4*l2t)+ltoff
 #	lendx := lstartx+($5*l2t)
 #	line dashed from L_$1_$2_a.w to L_$1_$2_b.w # outline "grey"
-#	line dashed from MB1_$1.nw + (lendx,-lym) to MB2_$1.sw + (lendx,lyf)\
+#	line dashed from MB1_$1.nw + (lendx,-lym) to MB2_freq.sw + (lendx,lyf)\
 #		outline "grey"
 }

@@ -1,0 +1,54 @@
+#!/bin/sh
+#
+# $Id: plot-rms 605 2006-07-04 16:39:41Z nicb $
+#
+# Calling sequence:
+#
+# ./plot-rms
+#
+MODMAX=16
+LOGFILE="pII-FINAL.log"
+SUFFIX="plot.tmpfile"
+OUTFILE="pII-FINAL.ampiezze.pdf"
+
+x=1
+while [ $x -lt $MODMAX ]
+do
+	name=$(printf "%02d" $x)
+	out="$name.$SUFFIX"
+	grep "^modulo $name" $LOGFILE | cut -d ' ' -f 4- \
+	| awk '{ $2=(20/log(10))*log($2+1); $3=(20/log(10))*log($3+1);\
+		printf("%8.4f %8.4f %8.4f\n",$1, $2, $3) }' > $name.$SUFFIX
+	let x=$x+1
+done
+
+(echo -e "set term postscript color";
+x=1
+while [ $x -lt $MODMAX ]
+do
+	name0=$(printf "%02d" $x)
+	let x=$x+1
+	name1=$(printf "%02d" $x)
+	let x=$x+1
+	name2=$(printf "%02d" $x)
+	let x=$x+1
+	
+	cat <<EOF
+	set multiplot;
+	set size 1,0.3
+	set origin 0,0.7
+	plot [][0:120] "$name0.$SUFFIX" using 1:2 w lines lw 4 title "modulo $name0 left",\
+ 				   "$name0.$SUFFIX" using 1:3 w lines lw 4 title "modulo $name0 right"
+	set origin 0,0.35
+	plot [][0:120] "$name1.$SUFFIX" using 1:2 w lines lw 4 title "modulo $name1 left",\
+ 				   "$name1.$SUFFIX" using 1:3 w lines lw 4 title "modulo $name1 right"
+	set origin 0,0
+	plot [][0:120] "$name2.$SUFFIX" using 1:2 w lines lw 4 title "modulo $name2 left",\
+ 				   "$name2.$SUFFIX" using 1:3 w lines lw 4 title "modulo $name2 right"
+	set nomultiplot
+EOF
+done ) | gnuplot | ps2pdf - > $OUTFILE
+
+rm *.$SUFFIX
+
+exit 0

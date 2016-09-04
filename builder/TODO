@@ -2,17 +2,25 @@ Ampiezze:
 
 *) seguire pedissequamente la partitura *MA* (DONE)
 
-*) rifare la tavola di Fletcher con ampiezze riscalate
+*) rifare la tavola di Fletcher con ampiezze riscalate (DONE)
 
-*) cambiare gli inviluppi da tavole a segmenti lineari (a tempi fissi)
+*) cambiare gli inviluppi da tavole a segmenti lineari (a tempi fissi) (DONE)
 
-*) fare grafici di tutti gli inviluppi
+*) fare grafici di tutti gli inviluppi (DONE)
 
-*) fare misure e tavole dei valori RMS di ciascun modulo
+*) fare misure e tavole dei valori RMS di ciascun modulo (DONE)
 
 *) preparare lo strumento per la distanza del modulo, con regolazione da
    tavola di 15 numeri (in maniera da poter cambiare solo la tavola senza dover
    entrare nella partitura - forse file esterno?)
 
+-----------
+
+1) fare versione per singoli moduli
+
+2) rilevare le ampiezze sul punto di ascolto
+
+3) grafica specializzata delle tavole
+
 --
-$Id: TODO 440 2006-03-19 21:48:17Z nicb $
+$Id: TODO 499 2006-04-09 00:33:25Z nicb $

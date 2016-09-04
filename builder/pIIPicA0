@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# $Id$
+#
+# In fact, no viewers will grok anything else but a4 so we're stuck with that
+# for now
+#
+PIC='groff -dpaper=a4 -p -mpic -P-l'
+PYRENDERER='./PII/pIIPicA0.py'
+VISUAL='gv -orientation=landscape -'
+PDF='ps2pdf -sPAPERSIZE=a4 - pIIA0.pdf'
+OUTPUT=$VISUAL
+
+usage()
+{
+	echo "Usage: $0 [-p|--pdf] [[mod1] ...]" 1>&2
+	exit -1
+}
+
+COMMANDSTRING=$(getopt -o "p" --long "pdf" -- "$@")
+eval set -- "$COMMANDSTRING"
+
+while true
+do
+	case "$1" in
+		-p|--pdf) OUTPUT=$PDF; shift;;
+		--) shift; break;;
+		*) usage;;
+	esac
+done
+
+$PYRENDERER $@ | $PIC | $OUTPUT
+
+exit 0

@@ -13,7 +13,7 @@ class RendererCsound (Renderer.Renderer):
 	tablesize = 4096
 	envtableoff = 10
 	genvtableoff = 100
-	genvtablefuzz = 0.3
+	genvtablefuzz = 8
 	idb = InviluppiDB.InviluppiDB()
 	adb = AmpiezzeDB.AmpiezzeDB()
 	gim = { '01': 'B', '02': 'B', '03': 'B', '04': 'B', '05': 'B',\
@@ -40,29 +40,38 @@ class RendererCsound (Renderer.Renderer):
 			print "f%d 0 %d 7 %s" % (RendererCsound.gimn[k]+RendererCsound.genvtableoff,\
 				RendererCsound.tablesize+1, coordstrings)
 
+	def genvelope(self, m):
+		key = RendererCsound.gim[m.tag]
+		gi = GlobInv.gi[key]
+		print "i10 0 %5.1f %d %d" % (Modulo.Modulo.tfin+\
+		    RendererCsound.genvtablefuzz,\
+			RendererCsound.gimn[key]+\
+			RendererCsound.genvtableoff,\
+			RendererCsound.modidx[m.tag])
 
-	def genvelopes(self):
-		for k in RendererCsound.gim.keys():
-			gi = GlobInv.gi[RendererCsound.gim[k]]
-			print "i10 0 %5.1f %d %d" % (Modulo.Modulo.tfin+\
+	def room_instrument(self,m):
+		print "i99 0 %5.1f %d" % (Modulo.Modulo.tfin+\
 			    RendererCsound.genvtablefuzz,\
-				RendererCsound.gimn[RendererCsound.gim[k]]+\
-				RendererCsound.genvtableoff,\
-				RendererCsound.modidx[k])
+				RendererCsound.modidx[m.tag])
 
 	def module_header(self, m):
 		print ";\n; Modulo %s - start: %9.4f end: %9.4f\n;" % \
 			(m.tag, m.start, m.start + m.dur)
+		self.genvelope(m)
+		self.room_instrument(m)
 
 	def module_trailer(self, key):
 		print ";================================================"
 
 	def global_header(self):
 		print ";\n; QUESTO FILE E` GENERATO AUTOMATICAMENTE - OGNI CAMBIAMENTO VERRA` SOVRASCRITTO\n;"
-		print "; Fausto Razzi - Progetto II"
-		print ";\nf1 0 8192 10 1\n;"
+		print "; Fausto Razzi - Progetto II;\n;"
+		print ";\nf1 0 8192 10 1\n;\n;\n#include \"posizioni.sco\"\n;\n;\n;"
+		print "i100 0 %5.1f\n;\n;" % (Modulo.Modulo.tfin+\
+			RendererCsound.genvtablefuzz)
+		print "i500 0 %5.1f ; cleanup\n;\n;" % (Modulo.Modulo.tfin+\
+			RendererCsound.genvtablefuzz)
 		self.genvelope_tables()
-		self.genvelopes()
 
 	def global_trailer(self):
 		print "e\n; FINE"
@@ -89,7 +98,7 @@ class RendererCsound (Renderer.Renderer):
 		return Renderer.Renderer.render_linea(self, m, l)
 
 	def render_module(self, m):
-		if self.global_offset:
-			print "a 0 0 %9.4f\n" % (self.global_offset)
+		#if self.global_offset:
+		#	print "a 0 0 %9.4f\n" % (self.global_offset)
 		for i in m.linee:
 			self.render_linea(m, i)

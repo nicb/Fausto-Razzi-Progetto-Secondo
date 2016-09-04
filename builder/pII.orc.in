@@ -1,0 +1,217 @@
+;
+; $Id: pII.orc.in 68 2014-02-18 23:49:56Z nicb $
+;
+@@HEADER@@
+
+giamp   init    10   ; moltiplicatore globale d'ampiezza
+garevs  init    0
+gidxoff init    31
+gizasiz init    64
+
+        zakinit gizasiz,1
+
+        instr 1             ; strumento con inviluppo a 4 segmenti
+        iamp = ampdb(p4)
+        if0 = p5
+        if1 = p6
+        if2 = p7
+        idur = p3
+        iidx = p8
+        irise = p9
+        ilev1 = p10
+        irel = p11
+        isust = idur-irise-irel
+
+kenv    linseg  0,irise,ilev1,isust,1,irel,0
+a0      oscil   iamp,if0,1
+a1      oscil   iamp,if1,1
+a2      oscil   iamp,if2,1
+as      =       (a0+a1+a2)/3
+as      =       as*kenv*giamp
+
+        prints "instr %d, zawm index: %d\\n",p1,iidx
+
+        zawm    as,iidx             ; manda allo strumento 10
+
+        endin
+
+        instr 2             ; strumento con inviluppo a 5 segmenti
+        iamp = ampdb(p4)
+        if0 = p5
+        if1 = p6
+        if2 = p7
+        idur = p3
+        iidx = p8
+        irise = p9
+        ilev1 = p10
+        idec  = p11
+        ilev2 = p12
+        irel  = p13
+        isust = idur-irise-idec-irel
+    
+kenv    linseg 0,irise,ilev1,idec,ilev2,isust,1,irel,0
+a0      oscil   iamp,if0,1
+a1      oscil   iamp,if1,1
+a2      oscil   iamp,if2,1
+as      =       (a0+a1+a2)/3
+as      =       as*kenv*giamp
+
+        zawm    as,iidx             ; manda allo strumento 10
+
+        endin
+
+       instr 10                     ; strumento degli inviluppi globali
+       idur = p3
+       itab = p4
+       iidx = p5 
+       idxout = p5+gidxoff
+
+asig    zar    iidx                 ; riceve dagli strumenti 1 e 2
+kenv    oscil1i 0,1,idur,itab
+
+
+aout    =      asig*kenv
+
+        zaw     aout,idxout          ; manda allo strumento 99
+
+        endin
+
+;
+; spazializzatore:
+; - il sistema emula uno spazio d'ascolto fisico così costitutito:
+;
+;                           3m
+;     |=|<----------------------------------------->|=|
+;    /___\                   |                     /___\
+;                            |
+;                            |
+;                            |
+;                            | 3m
+;                            |
+;                            |
+;                            |
+;                            |
+;                            v
+;                          /---\
+;                          |   | (ascoltatore)
+;                          \---/
+;                           0.2m
+;
+; - il sistema *simula* uno spazio virtuale largo ca. 4m e profondo 60m
+;   (30m di fronte allo spettatore e 30m dietro allo spettatore)
+;
+; - il suono e` sempre "centrale" ma a distanze diverse dall'ascoltatore;
+;   questo permette alcune semplificazioni (che non sono piu` valide se i
+;   suoni non sono piu` centrali)
+;
+;
+        instr 99    ; spazializzatore, una istanza per modulo   
+;
+; dimensioni della stanza (ascolto si trova a 0,0)
+;
+irwidth     init        4   ;   larghezza della stanza (in m)
+irdepth     init       60   ;   profondita` della stanza (in m)
+ispkrlx     init     -1.5   ;   posizione dell'altoparlante sin. (in m, asse x)
+ispkrrx     init      1.5   ;   posizione dell'altoparlante des. (in m, asse x)
+ispkrry     init      3     ;   posizione dell'altoparlante sin. (in m, asse y)
+ispkrly     init    ispkrry ;   posizione dell'altoparlante des. (in m, asse y)
+ifront      init    (irdepth/2)-ispkrry     ; dist. frontale virtuale (altop->parete)
+iback       init  -((irdepth/2)+ispkrry)    ; dist. posteriore virtuale "      "
+imtab       init      500   ;   distance function number
+idistoff    init  ispkrry   ;   distanza dell'ascoltatore dall'altoparlante
+ispeed      init      344   ;   velocita` del suono (m/sec)
+irevfact    init      0.38  ;   coefficiente di riflessione delle pareti della stanza
+;
+; calcoli interni
+;
+isidesq     init  ispkrrx^2 ; quadrato del lato orizzontale
+;
+; calcoli per modulo
+;
+iidx        =     p4            ; indice del modulo
+iidxsig     =     iidx+gidxoff
+asig        zar   iidxsig       ; il segnale dagli strumenti 10
+idist       table iidx-1,imtab  ; lettura della distanza dalla tavola
+idistl      =     sqrt((idist^2)+isidesq)   ; distanza dall'altop. sinistro
+idistr      =     idistl                    ; distanza dall'altop. destro
+;
+; suono diretto
+;
+iampdirl    =     1/idistl                  ; ampiezza diretto altop.sinistro
+iampdirr    =     1/idistr                  ; ampiezza diretto altop.destro
+irev        =     irevfact/sqrt(idistl)     ; ampiezza del riverbero 
+ideldirl    =     idistl/ispeed             ; ritardo diretto altop.sinistro
+ideldirr    =     idistr/ispeed             ; ritardo diretto altop.destro
+;
+; prime riflessioni
+;
+idistr1lx   init -ispkrrx-irwidth           ; dist.orizz. rifless.1 sinistra
+idistr1rx   init -ispkrlx+irwidth           ; dist.orizz. rifless.1 destra
+idistr1fy   =    -idist+(ifront*2)          ; dist.vert.  rifless.1 frontale
+idistr1by   =    -idist+(iback*2)           ; dist.vert.  rifless.1 posteriore
+idistr1l    =    sqrt((idistr1lx^2)+(idist^2)); dist. rifless.1 sinistra
+idistr1r    =    idistr1l                   ; dist. rifless.1 destra
+idistr1f    =    sqrt((idistr1fy^2)+(ispkrlx^2)) ; dist. rifless.1 frontale
+idistr1b    =    sqrt((idistr1by^2)+(ispkrlx^2)) ; dist. rifless.1 posteriore
+iampr1l     =    1/idistr1l
+iampr1r     =    1/idistr1r
+iampr1f     =    1/idistr1f
+iampr1b     =    1/idistr1b
+idelr1l     =    idistr1l/ispeed
+idelr1r     =    idistr1r/ispeed
+idelr1f     =    idistr1f/ispeed
+idelr1b     =    idistr1b/ispeed
+;
+; segnale con ritardi e attenuazioni
+;
+adelayed    delayr  0.05
+asigdirl    deltap  ideldirl
+asigdirr    deltap  ideldirr
+asigr1l     deltap  idelr1l
+asigr1r     deltap  idelr1r
+asigr1f     deltap  idelr1f
+asigr1b     deltap  idelr1b
+asigrevs    deltap  (idelr1l+idelr1f)/2 ; segnale ritardato da mandare al riverbero
+            delayw  asig
+
+asigr1b     reson   asigr1b,2000,1000   ; filtro morbido per la rifl. post.
+
+aleft       =       (iampdirl*asigdirl)+(iampr1l*asigr1l)+\
+                    (((iampr1f*asigr1f)+(iampr1b*asigr1b))/2)
+aright      =       (iampdirr*asigdirr)+(iampr1r*asigr1r)+\
+                    (((iampr1f*asigr1f)+(iampr1b*asigr1b))/2)
+
+ktim        timek  
+krmsl       rms     aleft,2          ; this is just for plotting
+krmsr       rms     aright,2         ; this is just for plotting
+            printks "modulo %02d (left-right):  %f %f %f\\n",2,iidx,ktim/kr,krmsl,krmsr
+
+            outs    aleft,aright
+
+garevs      =       garevs+(asigrevs*irev)
+
+            print   iidx,idist,ifront,iback,iampdirl,iampdirr,ideldirl,ideldirr,\
+                    iampr1l,idelr1l,iampr1r,idelr1r,iampr1f,idelr1f,\
+                    iampr1b,idelr1b,irev
+
+            endin
+
+            instr 100
+
+aleft       nreverb garevs,3.265,0.13
+aright      nreverb garevs,3.257,0.17
+
+            outs    aleft,aright
+ktim        timek   
+krmsl       rms     aleft,4         ; this is just for plotting
+krmsr       rms     aright,4        ; this is just for plotting
+            printks "riverbero: %f %f %f\\n",0.5,ktim/kr,krmsl,krmsr
+
+            endin
+
+            instr 500               ; garbage cleanup instrument
+
+garevs      =       0
+            zacl    0,gizasiz
+
+            endin
