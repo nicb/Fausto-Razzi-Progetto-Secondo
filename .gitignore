@@ -87,3 +87,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Progetto II files:
+builder/pII-FINAL.*
