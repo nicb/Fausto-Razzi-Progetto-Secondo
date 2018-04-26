@@ -90,3 +90,6 @@ ENV/
 
 # Progetto II files:
 builder/pII-FINAL.*
+
+# Progetto II .sco files:
+modulo-*.sco
