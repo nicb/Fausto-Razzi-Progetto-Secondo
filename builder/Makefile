@@ -47,7 +47,7 @@ $(DRAFTORC):	$(DRIVER)
 final:	$(FINAL)
 
 $(FINAL):	$(FINALORC) $(FINALSCO) $(SPATFILE)
-	$(CSOUND) -dWo ./$@ \
+	$(CSOUND) -3dWo ./$@ \
 		$(FINALORC) $(FINALSCO) > $(FINALLOG) 2>&1
 	$(NORMALIZE) $@
 
